@@ -1,0 +1,19 @@
+Id, CountryId, Name
+201,1,Skoda
+202,2,Peugeot
+203,2,Renault
+204,2,Citroen
+205,3,Volkswagen
+206,3,BMW
+207,3,Mercedes-Benz
+208,4,Fiat
+209,4,Alfa Romeo
+210,4,Maserati
+211,5,Toyota
+212,5,Nissan
+213,5,Honda
+214,6,Lada
+215,7,Hyundai
+216,7,Kia
+217,10,SEAT
+218,12,Ford
