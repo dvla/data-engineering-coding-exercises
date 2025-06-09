@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "vehicles"
+version = "0.1.0"
+description = ""
+authors = ["Michał Poręba <michalporeba@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+duckdb = "^1.3"
+argparse = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
