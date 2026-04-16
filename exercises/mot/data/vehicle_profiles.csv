@@ -1,0 +1,18 @@
+PostcodeArea,VehicleType,AverageAge,Count,LastUpdated
+SA,Car,8.5,45200,15 Ionawr 2024
+SA,Van,9.2,12100,15 Ionawr 2024
+SA,Motorcycle,7.8,4300,15 Ionawr 2024
+CF,Car,7.2,62300,15 Ionawr 2024
+CF,Van,8.1,16500,15 Ionawr 2024
+CF,Motorcycle,6.9,5800,15 Ionawr 2024
+NP,Car,8.8,30100,15 Chwefror 2024
+NP,Van,9.5,8200,15 Chwefror 2024
+NP,Motorcycle,7.5,3100,15 Chwefror 2024
+LL,Car,9.1,25600,15 Chwefror 2024
+LL,Van,10.2,7800,15 Chwefror 2024
+LL,Motorcycle,8.3,2900,15 Chwefror 2024
+SY,Car,9.4,11200,15 Mawrth 2024
+SY,Van,10.5,3400,15 Mawrth 2024
+SY,Motorcycle,8.7,1500,15 Mawrth 2024
+SA,Austin 7,101.0,1,15 Mawrth 2024
+CF,Bicycle,2.0,1,15 Mawrth 2024
