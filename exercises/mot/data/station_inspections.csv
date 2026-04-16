@@ -1,0 +1,10 @@
+StationId,InspectionDate,Result,Inspector,Notes
+1,2023-06-15,Pass,Williams,All standards met
+3,2023-07-22,Pass,Williams,Minor issues noted and resolved on site
+4,2023-09-10,Fail,Jones,Equipment calibration out of specification
+4,2024-02-14,Pass,Jones,Re-inspection after calibration. All clear.
+5,2024-01-18,Pass,Williams,Clean pass
+6,2023-11-03,Pass,Jones,Minor paperwork issues. Standards met.
+8,2024-03-22,Fail,Williams,Brake roller calibration drift detected
+8,2024-08-15,Pass,Williams,Re-inspection passed after maintenance
+11,2024-05-10,Pass,Jones,All good

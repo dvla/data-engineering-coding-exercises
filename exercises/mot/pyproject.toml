@@ -1,0 +1,10 @@
+[project]
+name = "mot"
+version = "0.1.0"
+description = "Mostly OK, Technically"
+requires-python = ">=3.13"
+dependencies = [
+    "marimo>=0.13",
+    "duckdb>=1.2",
+    "pandas>=2.2",
+]

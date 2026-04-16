@@ -1,0 +1,13 @@
+StationId,StationName,Address,Postcode,OwnerName,OwnerPhone,Capacity,OpenedDate
+1,Swansea MOT Centre,15 High Street Swansea,SA1 3QE,John Davies,07712 345678,8,2012-03-15
+2,Pontypandy Auto Services,3 Station Road Pontypandy,sa64ab,Dai Evans,07798765432,4,2018-07-01
+3,Cardiff Bay Motors,42 Bute Terrace Cardiff,CF10 2FE,Sarah Williams,07723456789,12,2009-11-20
+4,Newport Vehicle Testing,88 Commercial Street Newport,NP20 1LU,Mike Jones,07734 567890,6,2015-06-10
+5,Wrexham AutoCheck,7 Regent Street Wrexham,LL11 1PF,Owen Roberts,07745678901,5,2016-09-01
+6,Carmarthen Test Centre,21 Lammas Street Carmarthen,SA31 3AL,Rhian Morgan,07756 789012,6,2014-04-22
+7,Gorseinon Garage,9 High Street Gorseinon,SA4 4BT,Tom Price,07767890123,3,2020-01-15
+8,Canton MOT,55 Cowbridge Road East Cardiff,cf119ab,Helen Lewis,07778 901234,7,2011-08-30
+9,Swansea East Testing,12 Neath Road Swansea,Sa1 2Bq,James Rees,07789012345,5,2017-02-28
+10,Pontypandy Quick Test,17 High Street Pontypandy,SA6 4CD,Dai Evans,07798765432,3,2022-03-10
+11,Llanelli MOT Services,6 Station Road Llanelli,SA15 1AN,Peter Thomas,07790 123456,4,2019-05-15
+12,Aberystwyth Vehicle Centre,33 Great Darkgate Street Aberystwyth,SY23 1DE,Nia Griffiths,07701234567,4,2013-10-01
