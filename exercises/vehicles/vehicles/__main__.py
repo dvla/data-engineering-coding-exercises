@@ -1,5 +1,4 @@
 import argparse
-import base64 
 from vehicles.model import *
 from vehicles.data import *
 
@@ -9,12 +8,6 @@ def test(_):
         print("OK: There is some test data. Let's go.")
     else:
         print("ERROR: There is no test data.")
-
-
-def are_you_ready(_):
-    with open("vehicles/.code", "r") as file:
-        code = file.read()
-        print(base64.b64decode(code).decode("utf-8"))
 
 
 def show_imports(_):
@@ -47,7 +40,7 @@ def show(command):
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", nargs="*", default=["start"])
+    parser.add_argument("command", nargs="*", default=["test"])
     return parser.parse_args()
 
 
@@ -58,7 +51,6 @@ def main():
 
     {
         "show": show,
-        "start": are_you_ready,
         "test": test
     }[arguments.command[0]](arguments.command[1:])
 
