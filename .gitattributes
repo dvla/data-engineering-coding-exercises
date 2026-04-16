@@ -1,0 +1,17 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Source code
+*.py text eol=lf
+
+# Data
+*.csv text eol=lf
+
+# Config / metadata
+*.toml text eol=lf
+*.lock text eol=lf
+*.gitignore text eol=lf
+
+# Documentation
+*.md text eol=lf
+LICENSE text eol=lf
