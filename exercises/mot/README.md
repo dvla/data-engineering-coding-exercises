@@ -36,7 +36,7 @@ If you have cloned the repository and have problems starting:
 
 ## Code Layout
 
-* `notebook.py` is the marimo notebook containing the data pipeline.
+* `start_here.py` is the marimo notebook containing the setup for the exercise.
 * `data/mot_results.csv` contains MOT test outcome statistics — this is based on publicly available data.
 * `data/testing_stations.csv` contains local testing station details.
 * `data/vehicle_profiles.csv` contains vehicle age distributions by postcode area.
