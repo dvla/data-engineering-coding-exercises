@@ -4,7 +4,7 @@ __generated_with = "0.23.1"
 app = marimo.App(width="medium")
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _():
     import marimo as mo
 
@@ -124,7 +124,7 @@ def _(pd):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(mo):
     _df = mo.sql(
         f"""
@@ -172,7 +172,7 @@ def _(df1, mo):
         from read_csv('data/sample.csv')
         where name = 'Bob'
         -- the last query becomes available by variable / table name 
-        -- as defined below in the 'Output variable', as long as the variable does not start with an underscore. 
+        -- as defined below in the 'Output variable', as long as the variable does not start with an underscore.
         """
     )
     return (bobs,)
@@ -198,12 +198,12 @@ def _(bobs, mo):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(carols, mo):
     _df = mo.sql(
         f"""
         -- carols table is available for querying from 
-        select * from carols; 
+        select * from carols;
         """
     )
     return
