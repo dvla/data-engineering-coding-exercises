@@ -1,0 +1,6 @@
+id,name,city,score,active
+1,Alice,Cardiff,82.5,true
+2,Bob,Swansea,74.0,false
+3,Carol,Bangor,91.3,true
+4,Dave,Newport,68.7,true
+5,Eve,Wrexham,55.2,false

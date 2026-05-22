@@ -20,7 +20,7 @@ To prepare for the exercise:
 1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 1. Navigate to ./exercises/mot/
 1. Install the dependencies by executing `uv sync`
-1. Start the notebook by executing `uv run marimo edit notebook.py`
+1. Start the notebook by executing `uv run marimo edit start_here.py`
 1. Run the verification cell (the one that reads from `.code`). It should display a message starting with 'Congratulations!'. You will need to send the full message to the recruiters to proceed to the next step.
 
 If you see the message, take some time to review the code. If not, below are some troubleshooting ideas.
@@ -30,7 +30,7 @@ If you see the message, take some time to review the code. If not, below are som
 If you have cloned the repository and have problems starting:
 * Check you are inside the exercises/mot/ directory.
 * Check you have installed the dependencies with `uv sync`.
-* If `uv run marimo edit notebook.py` doesn't work, try `uv run marimo run notebook.py` to verify the setup without the editor UI.
+* If `uv run marimo edit start_here.py` doesn't work, try `uv run marimo run start_here.py` to verify the setup without the editor UI.
 * Make sure you are using Python 3.13 or later.
 * If uv is not found, check the [installation instructions](https://docs.astral.sh/uv/getting-started/installation/).
 

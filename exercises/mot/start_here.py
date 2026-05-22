@@ -48,10 +48,13 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## The check
+    ## The verification step
 
-    Run the below cell. It will print a message with a verification code. Tell the recruiters the code.
-    If you don't see the verification code you may see an error. You will have to follow the documentation and make it work so you get the code.
+    Run the below cell. It will print a message with a verification code.
+    Give the recruiters the code to progress to the next stage of the recruitment process.
+
+    If you don't see the verification code you may see an error.
+    You will have to make it work so you get the code.
     """)
     return
 
@@ -73,7 +76,17 @@ def _(Path, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    That's it, however, if you want to learn more about how you can work with data in a Marimo notebook, continue reading.
+    **That's it!** Send the **validation code above** to the recruiters. **Good luck** in your application process.
+
+    However, if you want to learn more about how you can work with data in a Marimo notebooks, continue reading. Basic knowledge of Marimo notebooks will be helpful during the interview.
+
+
+    .
+
+    .
+
+    .
+
 
     ## The data
 
@@ -106,7 +119,7 @@ def _(pd):
     _df = pd.read_csv("data/sample.csv")
 
     # the output of the last statement may be rendered if it is of a supported type
-    # otherwise it's string representation will be presented. 
+    # otherwise its string representation will be presented. 
     _df
     return
 
@@ -115,7 +128,8 @@ def _(pd):
 def _(mo):
     _df = mo.sql(
         f"""
-        -- SQL cells can use SQL to query the files
+        -- In SQL cells you can use SQL to query the files, too. 
+        -- While some understanding of python is helpful, many things can be done using SQL
         select * from read_csv("data/sample.csv")
         """
     )
@@ -123,116 +137,106 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
-    _df = mo.sql(
-        f"""
-        select * from read_csv("data/sample.csv")
-        """
-    )
-    return
-
-
-@app.cell
 def _(mo):
     mo.md("""
     ## Data Loading
 
-    The pipeline loads data from four sources:
-    1. **MOT Results** — national test outcome statistics (public data)
-    2. **Testing Stations** — local station details
-    3. **Vehicle Profiles** — vehicle age distributions by area
-    4. **Station Inspections** — quality audit records
+    Marimo has three types of cells: Markdown (like this one), Python and SQL. They types are indicated in the bottom right corner next to the red bin icon, and they can be changed in the options menu in the top right corner of the cell - the (...) button.
+
+    Data can be loaded with either Python or SQL. Data loaded with Python is accessible (as long as it is in public variables) and data loaded by SQL can be accessed in Python.
     """)
     return
 
 
 @app.cell
-def _(duckdb, pd):
-    mot_results = pd.read_csv("data/mot_results.csv")
-    conn = duckdb.connect()
-    conn.execute("CREATE TABLE mot_results AS SELECT * FROM mot_results").df()
-    return conn, mot_results
+def _(pd):
+    # read data from sample.csv and save it to df1
+    df1 = pd.read_csv('data/sample.csv')
+    # filter the data to show only rows with Alice keeping the same name
+    df1 = df1[df1['name']=='Alice']
+    # display df1
+    df1
+    return (df1,)
+
+
+@app.cell
+def _(df1, mo):
+    bobs = mo.sql(
+        f"""
+        -- df1 is also, automatically, available as a table so
+        -- so it can be queried with SQL statements
+        select * from df1;
+
+        -- but it is also possible to query the source files directly in SQL
+        select * 
+        from read_csv('data/sample.csv')
+        where name = 'Bob'
+        -- the last query becomes available by variable / table name 
+        -- as defined below in the 'Output variable', as long as the variable does not start with an underscore. 
+        """
+    )
+    return (bobs,)
+
+
+@app.cell
+def _(bobs, mo):
+    _df = mo.sql(
+        f"""
+        -- using output of the last query in the earlier cell
+        -- by using the variable name specify in the cell 'Output variable' property
+        select * from bobs;
+
+        -- but it is also possible to create tables and naming them explicitly in SQL code
+        create table carols 
+        as
+        select * 
+        from read_csv('data/sample.csv')
+        where name = 'Carol'
+        -- there is no output, because the last statement doens't return anything.
+        """
+    )
+    return
 
 
 @app.cell(hide_code=True)
-def _(mo, mot_results):
+def _(carols, mo):
     _df = mo.sql(
         f"""
-        select * from mot_results
+        -- carols table is available for querying from 
+        select * from carols; 
         """
     )
     return
 
 
 @app.cell
-def _(conn, pd):
-    stations = pd.read_csv(_data_dir / "TestingStations.csv")
-    conn.execute("CREATE TABLE testing_stations AS SELECT * FROM stations")
-    return (stations,)
-
-
-@app.cell
-def _(conn, pd):
-    profiles = pd.read_csv(_data_dir / "vehicle_profiles.csv")
-    profiles["LastUpdated"] = pd.to_datetime(profiles["LastUpdated"])
-    conn.execute("CREATE TABLE vehicle_profiles AS SELECT * FROM profiles")
-    return (profiles,)
-
-
-@app.cell
-def _(conn, pd):
-    try:
-        inspections = pd.read_csv(_data_dir / "station_inspections.csv")
-        inspections["StationId"] = inspections["StationId"].astype(int)
-        conn.execute(
-            "CREATE TABLE station_inspections AS SELECT * FROM inspections"
-        )
-    except:
-        pass
+def _(bobs):
+    # in python, when you use 'Output variable' option, you can just use the variable
+    print(f'bobs is a regular variable of type {type(bobs)}')
+    bobs
     return
 
 
 @app.cell
+def _(carols, duckdb):
+    # but carols is not available as a variable. 
+    # to use it in Python, we need to query it as a SQL table
+    df2 = duckdb.sql("select * from carols").df()
+    # the .df() is important to get to pandas dataframe. 
+    df2
+    return
+
+
+@app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
-    ## Data Summary
+    mo.md(r"""
+    ## The Exercise
 
-    Quick look at what we have loaded.
+    The exercise will be about working with data not about proficiency with Marimo notebooks.
+    We use Marimo to ensure everybody has the same modern interface with access to both python and SQL, and without any unnecessary dependencies.
+
+    During the interview we will provide you with a laptop with everything set up, and a notebook running. The tasks can be solved with either SQL or Python, or with a mixture of both.
     """)
-    return
-
-
-@app.cell
-def _(mot_results):
-    mot_results.head(10)
-    return
-
-
-@app.cell
-def _(stations):
-    stations.head(10)
-    return
-
-
-@app.cell
-def _(profiles):
-    profiles.describe()
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md("""
-    ## Analysis
-
-    Use the cells below for your work.
-    """)
-    return
-
-
-@app.cell
-def _(conn):
-    conn.sql("SELECT Region, VehicleType, SUM(TestCount) as TotalTests FROM mot_results GROUP BY Region, VehicleType").df()
     return
 
 
