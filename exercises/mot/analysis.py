@@ -67,7 +67,7 @@ def _(Path, pd):
 
 @app.cell
 def _(pd):
-    stations = pd.read_csv("stations_sample.csv")
+    stations = pd.read_csv("testing_stations_sample.csv")
     stations
     return (stations,)
 
@@ -75,6 +75,8 @@ def _(pd):
 @app.cell
 def _(pd):
     inspections = pd.DataFrame()
+
+    # adding to suppress some annoying errors
     try:
         inspections = pd.read_csv("data/StationInspections.csv")
     except:
@@ -89,7 +91,7 @@ def _(Path, pd):
 
     profiles = pd.read_csv(_data_dir / "vehicle_profiles.csv")
 
-    # in case we need year by year analysis
+    # work in progress: in case we need year by year analysis
     profiles["LastUpdated"] = pd.to_datetime(profiles["LastUpdated"])
     profiles
     return (profiles,)
@@ -221,30 +223,6 @@ def _(duckdb, silver_inspections, silver_stations):
     """)
     gold_stations = duckdb.sql("SELECT * FROM gold_station_summary").df()
     gold_stations
-    return
-
-
-@app.cell
-def _(duckdb, silver_mot_results):
-    gold_output = duckdb.sql("""
-        SELECT
-            r.Year,
-            r.Region,
-            r.VehicleType,
-            r.TestCount,
-            r.PassCount,
-            r.FailCount,
-            r.FailureRate,
-            r.FailCategory_Brakes,
-            r.FailCategory_Lights,
-            r.FailCategory_Tyres,
-            r.FailCategory_Emissions,
-            r.FailCategory_Suspension,
-            r.FailCategory_Other
-        FROM silver_mot_results r
-    """).df()
-    gold_output.to_parquet("data/mot_analysis_output.parquet", index=False)
-    gold_output
     return
 
 
