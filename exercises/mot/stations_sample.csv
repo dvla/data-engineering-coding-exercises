@@ -9,5 +9,3 @@ StationId,StationName,Address,Postcode,OwnerName,OwnerPhone,Capacity,OpenedDate
 8,Canton MOT,55 Cowbridge Road East Cardiff,cf119ab,Gwen Cooper,07778 901234,7,2011-08-30
 9,Swansea East Testing,12 Neath Road Swansea,Sa1 2Bq,Ianto Jones,07789012345,5,2017-02-28
 10,Pontypandy Quick Test,17 High Street Pontypandy,SA6 4CD,Dai Bread,07798765432,3,2022-03-10
-11,Llanelli MOT Services,6 Station Road Llanelli,SA15 1AN,Caradog Lloyd-Evans,07790 123456,4,2019-05-15
-12,Aberystwyth Vehicle Centre,33 Great Darkgate Street Aberystwyth,SY23 1DE,Mared Rhys,07701234567,4,2013-10-01
