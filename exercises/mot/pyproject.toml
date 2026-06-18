@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Mostly OK, Technically"
 requires-python = ">=3.13"
 dependencies = [
-    "marimo>=0.13",
+    "marimo>=0.23.9",
     "duckdb>=1.2",
     "pandas>=2.2",
     "sqlglot (>=30.4.3,<31.0.0)",
