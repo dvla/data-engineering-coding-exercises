@@ -17,212 +17,96 @@ def _():
     import pandas as pd
     from pathlib import Path
 
-    return Path, duckdb, pd
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    # MOT Cymru — Data Pipeline
-
-    This notebook implements a simple **bronze → silver → gold** pipeline
-    for MOT test data across Wales.
-
-    - **Bronze:** raw data loaded from CSV files
-    - **Silver:** cleaned and standardised tables registered in DuckDB
-    - **Gold:** analyst-ready views and exports
-
-    The transport analytics team will consume the gold layer outputs.
-    """)
-    return
-
-
-@app.cell
-def _(Path):
-    _data_files = sorted(f.name for f in Path("data").iterdir() if f.is_file())
-    for _f in _data_files:
-        print(_f)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ## Bronze Layer — Raw Data Loading
+    # MOT Cymru: Production Engineering
 
-    Load all source CSV files into DataFrames. These are the raw inputs
-    before any cleaning or transformation.
+    You are picking up ownership of the MOT Cymru analysis pipeline from a previous
+    engineer. The data is loaded and ready. Your job is to build on top of it.
+
+    Work through the three tasks below. You do not need to finish every sub-question —
+    **depth and reasoning matter more than coverage**. As you work, talk through what
+    you are doing, what you are choosing not to do, and anything in the data that
+    concerns you.
+
+    > Stack: Python 3.13 · DuckDB · pandas · marimo
     """)
-    return
-
-
-@app.cell
-def _(Path, pd):
-    _data_dir = Path("data")
-
-    mot_results = pd.read_csv(_data_dir / "mot_results.csv")
-    mot_results
-    return (mot_results,)
-
-
-@app.cell
-def _(pd):
-    stations = pd.read_csv("testing_stations_sample.csv")
-    stations
-    return (stations,)
-
-
-@app.cell
-def _(pd):
-    inspections = pd.DataFrame()
-
-    # adding to suppress some annoying errors
-    try:
-        inspections = pd.read_csv("data/StationInspections.csv")
-    except:
-        pass
-    inspections
-    return (inspections,)
-
-
-@app.cell
-def _(Path, pd):
-    _data_dir = Path("data")
-
-    profiles = pd.read_csv(_data_dir / "vehicle_profiles.csv")
-
-    # work in progress: in case we need year by year analysis
-    profiles["LastUpdated"] = pd.to_datetime(profiles["LastUpdated"])
-    profiles
-    return (profiles,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    ## Silver Layer — Cleaning & Standardisation
-
-    Apply data quality rules, standardise formats, and register
-    cleaned tables in DuckDB for SQL access.
-    """)
-    return
-
-
-@app.cell
-def _(duckdb, mot_results):
-    duckdb.sql("DROP TABLE IF EXISTS silver_mot_results")
-    duckdb.sql("""
-        CREATE TABLE silver_mot_results AS
-        SELECT
-            Year,
-            Region,
-            VehicleType,
-            TestCount,
-            PassCount,
-            FailCount,
-            ROUND(FailCount * 100.0 / TestCount, 1) AS FailureRate,
-            FailCategory_Brakes,
-            FailCategory_Lights,
-            FailCategory_Tyres,
-            FailCategory_Emissions,
-            FailCategory_Suspension,
-            FailCategory_Other
-        FROM mot_results
-    """)
-    duckdb.sql("SELECT * FROM silver_mot_results LIMIT 5").df()
-    return
-
-
-@app.cell
-def _(duckdb, stations):
-    duckdb.sql("DROP TABLE IF EXISTS silver_stations")
-    duckdb.sql("""
-        CREATE TABLE silver_stations AS
-        SELECT
-            StationId,
-            StationName,
-            Address,
-            UPPER(REPLACE(Postcode, ' ', '')) AS Postcode,
-            OwnerName,
-            OwnerPhone,
-            Capacity,
-            CAST(OpenedDate AS DATE) AS OpenedDate
-        FROM stations
-    """)
-    duckdb.sql("SELECT * FROM silver_stations LIMIT 5").df()
-    return
-
-
-@app.cell
-def _(duckdb, profiles):
-    duckdb.sql("DROP TABLE IF EXISTS silver_profiles")
-    duckdb.sql("""
-        CREATE TABLE silver_profiles AS
-        SELECT
-            PostcodeArea,
-            VehicleType,
-            AverageAge,
-            Count,
-            LastUpdated
-        FROM profiles
-    """)
-    duckdb.sql("SELECT * FROM silver_profiles LIMIT 5").df()
-    return
-
-
-@app.cell
-def _(duckdb, inspections):
-    duckdb.sql("DROP TABLE IF EXISTS silver_inspections")
-    duckdb.sql("""
-        CREATE TABLE silver_inspections AS
-        SELECT
-            StationId,
-            CAST(InspectionDate AS DATE) AS InspectionDate,
-            Result,
-            Inspector,
-            Notes
-        FROM inspections
-    """)
-    duckdb.sql("SELECT * FROM silver_inspections LIMIT 5").df()
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ## Gold Layer — Analyst-Ready Output
-
-    Final dataset for the transport analytics team, combining station data
-    with MOT results and inspection status.
+    ## Setup — Data is ready below, run this cell first
     """)
     return
 
 
 @app.cell
-def _(duckdb, silver_inspections, silver_stations):
-    duckdb.sql("DROP VIEW IF EXISTS gold_station_summary")
-    duckdb.sql("""
-        CREATE VIEW gold_station_summary AS
-        SELECT
-            s.StationId,
-            s.StationName,
-            s.Address,
-            s.Postcode,
-            s.OwnerName,
-            s.OwnerPhone,
-            s.Capacity,
-            s.OpenedDate,
-            i.InspectionDate AS LastInspectionDate,
-            i.Result AS LastInspectionResult
-        FROM silver_stations s
-        LEFT JOIN (
-            SELECT StationId, InspectionDate, Result,
-                   ROW_NUMBER() OVER (PARTITION BY StationId ORDER BY InspectionDate DESC) AS rn
-            FROM silver_inspections
-        ) i ON s.StationId = i.StationId AND i.rn = 1
+def _(mo):
+    _df = mo.sql(
+        f"""
+        create table raw_mot 
+        as
+        select * from read_csv('data/mot_results.csv');
+
+        create table raw_stations
+        as
+        select * from read_csv('data/testing_stations.csv');
+
+        create table raw_inspections
+        as
+        select * from read_csv('data/station_inspections.csv');
+
+        create table raw_profiles
+        as
+        select * from read_csv('data/vehicle_profiles.csv');
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Warmup task
+
+    You have seen at the earlier stage the data. One obvious table is missing - regions.
+
+    Create `silver_stations` table and a `regions` dimension table by taking the last word from the stations' address
     """)
-    gold_stations = duckdb.sql("SELECT * FROM gold_station_summary").df()
-    gold_stations
+    return
+
+
+@app.cell
+def _(mo, raw_stations):
+    _df = mo.sql(
+        f"""
+        create or replace view silver_stations
+        as
+          select * 
+        	, null as region 
+          from raw_stations;
+
+        create or replace view dim_regions
+        as
+        ...
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo, silver_stations):
+    _df = mo.sql(
+        f"""
+        select * from silver_stations 
+        """
+    )
     return
 
 
@@ -230,8 +114,118 @@ def _(duckdb, silver_inspections, silver_stations):
 def _(mo):
     mo.md("""
     ---
-    **Pipeline complete.** The output parquet file is at `data/mot_analysis_output.parquet`.
+
+    ## Task 1 — Regional Failure Rate Trends
+
+    The transport analytics team wants to understand how MOT failure rates vary
+    across Welsh regions and whether they are getting better or worse over time.
+
+    Using the `mot_results` table:
+
+    **1a.** Calculate the overall failure rate per region (across all years combined),
+    ordered from highest to lowest.
+
+    **1b.** Extend the query to show failure rate **per region per year**, and add a
+    column with the **year-on-year change** in failure rate for each region.
+
+    **1c.** Identify regions that are **statistical outliers**. Quantify how unusual
+    each region is — not just that it looks different.
+
+    Call out anything in the data that concerns you as you go.
+    Think carefully about which columns belong in an analyst-facing output
+    and which do not.
     """)
+    return
+
+
+@app.cell
+def _(mo, raw_stations):
+    # Task 1 — your SQL goes here.
+    _df = mo.sql(
+        f"""
+        -- task 1 — your SQL goes here.
+        select * 
+        from raw_stations
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ---
+
+    ## Task 2 — Station Risk Profile
+
+    The compliance team needs a single table that brings together each testing
+    station with its most recent inspection outcome and the failure rate of its region.
+
+    Using `stations`, `inspections`, and your results from Task 1:
+
+    **2a.** For each station, find its **most recent** inspection date and result.
+    Stations that have never been inspected must still appear in the output.
+
+    **2b.** Join with regional failure rates from Task 1 to produce a station risk
+    profile.
+
+    **2c.** Add a column that flags stations you consider high-risk, and explain
+    your criteria.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    _df = mo.sql(
+        f"""
+        -- Task 2 — your SQL goes here.
+        select 'implement here'
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ---
+
+    ## Task 3 — Production Output
+
+    The data science team runs a nightly job that calls this notebook and expects
+    the station risk profile to be written to `data/station_risk.parquet`.
+
+    The job may run more than once on the same day (reruns after failures are common).
+    **Running it twice on the same day must not corrupt the output or log duplicate runs.**
+
+    **3a.** Write the station risk profile to `data/station_risk.parquet`.
+
+    **3b.** Create a `pipeline_runs` table in DuckDB that records each run:
+    at minimum — a timestamp, record count, and whether the output was written or skipped.
+
+    **3c.** Make the export idempotent: if a successful run has already completed
+    today, skip writing the file and record the skip in the log instead.
+    """)
+    return
+
+
+@app.cell
+def _(con):
+    # Task 3 — skeleton to get you started.
+    # The log table structure is yours to define.
+
+    con.execute("""
+        CREATE TABLE IF NOT EXISTS pipeline_runs (
+            run_id        INTEGER PRIMARY KEY,
+            run_timestamp TIMESTAMP,
+            records_written INTEGER,
+            status        VARCHAR,   -- 'written' | 'skipped'
+        )
+    """)
+
+    # Your idempotent export logic here
+    pass
     return
 
 
