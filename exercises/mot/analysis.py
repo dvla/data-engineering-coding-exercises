@@ -145,7 +145,7 @@ def _(mo, raw_stations):
         f"""
         -- task 1 — your SQL goes here.
         select * 
-        from raw_stations
+        from raw_mot
         """
     )
     return
