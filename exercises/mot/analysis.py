@@ -104,7 +104,7 @@ def _(mo, raw_stations):
 def _(mo, silver_stations):
     _df = mo.sql(
         f"""
-        select * from silver_stations 
+        select * from silver_stations
         """
     )
     return
@@ -139,7 +139,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, raw_stations):
+def _(mo, raw_mot):
     # Task 1 — your SQL goes here.
     _df = mo.sql(
         f"""
@@ -156,50 +156,15 @@ def _(mo):
     mo.md("""
     ---
 
-    ## Task 2 — Station Risk Profile
-
-    The compliance team needs a single table that brings together each testing
-    station with its most recent inspection outcome and the failure rate of its region.
-
-    Using `stations`, `inspections`, and your results from Task 1:
-
-    **2a.** For each station, find its **most recent** inspection date and result.
-    Stations that have never been inspected must still appear in the output.
-
-    **2b.** Join with regional failure rates from Task 1 to produce a station risk
-    profile.
-
-    **2c.** Add a column that flags stations you consider high-risk, and explain
-    your criteria.
-    """)
-    return
-
-
-@app.cell
-def _(mo):
-    _df = mo.sql(
-        f"""
-        -- Task 2 — your SQL goes here.
-        select 'implement here'
-        """
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    ---
-
-    ## Task 3 — Production Output
+    ## Task 2 — Production Output
 
     The data science team runs a nightly job that calls this notebook and expects
-    the station risk profile to be written to `data/station_risk.parquet`.
+    the region failure rates to be written to `data/region_failure_rates.parquet`.
 
     The job may run more than once on the same day (reruns after failures are common).
     **Running it twice on the same day must not corrupt the output or log duplicate runs.**
 
-    **3a.** Write the station risk profile to `data/station_risk.parquet`.
+    **3a.** Write the station risk profile to `data/region_failure_rates.parquet`.
 
     **3b.** Create a `pipeline_runs` table in DuckDB that records each run:
     at minimum — a timestamp, record count, and whether the output was written or skipped.
