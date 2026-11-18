@@ -1,0 +1,6 @@
+road_category,road_type,description
+MB,Minor,Minor B road
+MCU,Minor,Minor C or unclassified road
+PA,Major,Principal A road
+TA,Major,Trunk A road
+TM,Major,Trunk motorway
